@@ -211,11 +211,11 @@ a{color:var(--cyan-2)}
   background-size:32px 32px;-webkit-mask-image:radial-gradient(closest-side,#000 40%,transparent 100%);mask-image:radial-gradient(closest-side,#000 40%,transparent 100%)}
 .fx-emblem{position:relative;z-index:2;width:92%;overflow:hidden}
 .fx-emblem img{width:100%;display:block;filter:drop-shadow(0 24px 40px rgba(0,0,0,.55))}
-/* the one moment of motion: a single scan pass over the emblem on load */
+/* scan line sweeps the emblem, rests, then repeats (5s cycle) */
 .fx-emblem::after{content:"";position:absolute;left:-5%;right:-5%;height:22%;top:-25%;
   background:linear-gradient(180deg,transparent,rgba(92,203,244,.0) 20%,rgba(92,203,244,.35) 50%,rgba(92,203,244,.0) 80%,transparent);
-  mix-blend-mode:screen;animation:fx-scan 2.6s cubic-bezier(.45,.05,.35,1) .4s 1 forwards}
-@keyframes fx-scan{0%{top:-25%;opacity:1}90%{opacity:1}100%{top:105%;opacity:0}}
+  mix-blend-mode:screen;animation:fx-scan 5s ease-in-out .4s infinite}
+@keyframes fx-scan{0%{top:-25%;opacity:1}52%{top:105%;opacity:1}53%,100%{top:105%;opacity:0}}
 @media (prefers-reduced-motion:reduce){.fx-emblem::after{display:none}}
 
 /* ---------- Product sections ---------- */
