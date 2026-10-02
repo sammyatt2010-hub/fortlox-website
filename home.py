@@ -7,7 +7,7 @@ import streamlit.components.v1 as components
 
 from common import (ADDRESS_LINES, CALL_POP, CAM_TILE, COMPANY, EMAIL, MAP_QUERY, PHONE_DISPLAY,
                     PHONE_LINK, STEPS, WEBSITE, b64_file, door_link, esc, find_asset, footer, header,
-                    icon, render_html, setup)
+                    icon, photo, render_html, setup)
 
 setup()
 header("home")
@@ -39,7 +39,7 @@ with d1:
     with st.container(key="door-phones"):
         render_html(f"""
         <article class="fx-door">
-          <div class="vis">{CALL_POP}</div>
+          <div class="vis photo"><img src="{photo('Telephony_Omnichannel.jpg')}" alt="Calls, WhatsApp, Facebook, live chat, SMS and email connected in one system"></div>
           <div class="txt">
             <div class="fx-tag">{icon('phone', 16)}Telephony</div>
             <h2>Cloud phone systems</h2>
@@ -53,7 +53,7 @@ with d2:
     with st.container(key="door-cctv"):
         render_html(f"""
         <article class="fx-door">
-          <div class="vis">{CAM_TILE}</div>
+          <div class="vis photo"><img src="{photo('CCTV_Hero_Camera.jpg')}" alt="Security camera mounted on a building at night"></div>
           <div class="txt">
             <div class="fx-tag">{icon('camera', 16)}CCTV and security</div>
             <h2>Camera systems</h2>

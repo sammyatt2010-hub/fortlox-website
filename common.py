@@ -142,6 +142,12 @@ def product_image(name: str, max_px: int = 560) -> str:
 
 
 ICONS = {
+    "check": '<polyline points="20 6 9 17 4 12"/>',
+    "database": '<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>',
+    "image": '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>',
+    "cpu": '<rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/>',
+    "users": '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+    "chart": '<line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/>',
     "phone": '<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>',
     "mail": '<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>',
     "pin": '<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>',
@@ -162,6 +168,23 @@ ICONS = {
 
 
 
+@st.cache_data(show_spinner=False)
+def photo(name: str, max_px: int = 1200) -> str:
+    """Web-friendly data URI for a photo or screenshot (no background removal)."""
+    path = find_asset(name)
+    if not path:
+        return ""
+    try:
+        from PIL import Image
+        im = Image.open(path).convert("RGB")
+        im.thumbnail((max_px, max_px))
+        buf = io.BytesIO()
+        im.save(buf, "WEBP", quality=84)
+        return "data:image/webp;base64," + base64.b64encode(buf.getvalue()).decode()
+    except Exception:
+        return ""
+
+
 def icon(name, size=20):
     return (f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
             f'stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{ICONS[name]}</svg>')
@@ -175,6 +198,23 @@ def feature_grid(features, cols=2):
     )
     extra = " three" if cols == 3 else ""
     return f'<div class="fx-features{extra}">{cards}</div>'
+
+
+def feature_row(icon_name, tag, title, text, ticks, image, alt, flip=False):
+    """A two-column section: words and ticks on one side, a picture on the other."""
+    src = photo(image)
+    pic = f'<img src="{src}" alt="{esc(alt)}" loading="lazy">' if src else ""
+    ticks_html = "".join(f"<li>{icon('check', 18)}<span>{esc(t)}</span></li>" for t in ticks)
+    return (f'<section class="fx-row{" flip" if flip else ""}">'
+            f'<div class="words"><div class="fx-tag">{icon(icon_name, 16)}{esc(tag)}</div>'
+            f'<h2>{esc(title)}</h2><p>{esc(text)}</p><ul class="fx-ticks">{ticks_html}</ul></div>'
+            f'<div class="pic">{pic}</div></section>')
+
+
+def tech_cards(items):
+    cards = "".join(f'<div class="fx-tech"><div class="ring">{icon(ic, 26)}</div><h4>{esc(t)}</h4><p>{esc(d)}</p></div>'
+                    for ic, t, d in items)
+    return f'<div class="fx-techs">{cards}</div>'
 
 
 def mailto(subject, body=""):
@@ -477,6 +517,35 @@ a.fx-detail:hover .v{color:var(--cyan-2)}
   .fx-navon{padding:8px 8px;font-size:.86rem}
   .st-key-fx-header .fx-nav a.hide-m{display:none!important}
 }
+/* ---------- Feature rows (sub-pages) ---------- */
+.fx-row{display:grid;grid-template-columns:1fr 1.15fr;gap:56px;align-items:center;padding:64px 0;border-top:1px solid var(--border)}
+.fx-row.flip{grid-template-columns:1.15fr 1fr}
+.fx-row.flip .pic{order:-1}
+.fx-row h2{font-family:var(--display);font-weight:700;font-size:clamp(1.7rem,3vw,2.3rem);line-height:1.1;color:var(--text);margin:0 0 14px;padding:0}
+.fx-row p{color:var(--muted);font-size:1.03rem;line-height:1.7;margin:0 0 22px;max-width:32em}
+.fx-row .pic img{width:100%;display:block;border-radius:18px;border:1px solid var(--border-strong);box-shadow:0 30px 60px -30px rgba(0,0,0,.85)}
+.fx-ticks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.fx-ticks li{display:flex;align-items:flex-start;gap:12px;color:var(--text);font-size:.98rem;margin:0}
+.fx-ticks svg{color:var(--cyan-2);flex:none;margin-top:2px}
+.fx-also{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:28px 0 8px;border-top:1px solid var(--border)}
+.fx-also .l{color:var(--muted);font-size:.92rem;margin-right:6px}
+.fx-also span.c{font-size:.84rem;font-weight:600;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:6px 12px}
+.fx-phero.solo{grid-template-columns:1fr;padding-bottom:40px}
+.fx-phero.solo .lede{max-width:40em}
+.fx-techs{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:8px}
+.fx-tech{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:30px 26px;text-align:center}
+.fx-tech .ring{width:64px;height:64px;margin:0 auto 18px;border-radius:50%;display:grid;place-items:center;color:var(--cyan-2);border:1px solid rgba(41,169,225,.45);background:rgba(41,169,225,.08)}
+.fx-tech h4{font-family:var(--display);font-weight:700;font-size:1.15rem;color:var(--text);margin:0 0 8px;padding:0}
+.fx-tech p{color:var(--muted);font-size:.93rem;line-height:1.6;margin:0}
+.fx-door .vis.photo{padding:0;background:var(--bg)}
+.fx-door .vis.photo::before{display:none}
+.fx-door .vis.photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+@media (max-width:900px){
+  .fx-row,.fx-row.flip{grid-template-columns:1fr;gap:28px;padding:48px 0}
+  .fx-row.flip .pic,.fx-row .pic{order:-1}
+  .fx-techs{grid-template-columns:1fr}
+}
+@media (max-width:600px){ .fx-door .vis.photo{height:220px} }
 </style>
 """
 
