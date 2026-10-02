@@ -32,7 +32,7 @@ from reportlab.platypus import (HRFlowable, Image as RLImage, Paragraph, SimpleD
                                 TableStyle)
 
 from common import (ADDRESS_LINES, COMPANY, EMAIL, PHONE_DISPLAY, WEBSITE, b64_file, esc, find_asset,
-                    product_image, render_html)
+                    header, product_image, render_html, setup)
 
 # #####################################################################
 #
@@ -109,7 +109,9 @@ html,body,[class*="css"],.stApp,button,input,textarea,select,
 .stApp{background:radial-gradient(1200px 500px at 85% -10%,rgba(41,169,225,.09),transparent 60%),var(--bg)}
 [data-testid="stHeader"],[data-testid="stToolbar"],[data-testid="stDecoration"],[data-testid="stSidebar"],[data-testid="collapsedControl"]{display:none!important}
 footer{visibility:hidden}
-.block-container{padding-top:1.6rem!important;padding-bottom:3rem!important;max-width:1440px}
+.block-container{padding-bottom:3rem!important;max-width:1440px!important}
+.pe-hero{margin-top:22px}
+.pe-login-head{margin-top:5vh!important}
 [data-testid="stWidgetLabel"] p{font-size:.76rem!important;font-weight:600!important;color:var(--muted)!important;text-transform:uppercase;letter-spacing:.06em}
 [data-testid="stCaptionContainer"]{color:var(--muted)!important}
 .st-key-card-users,.st-key-card-hardware,.st-key-card-details,.st-key-card-summary,.st-key-card-cv-head,.st-key-card-cv-monthly,
@@ -320,7 +322,9 @@ def _secret(key, default=""):
 # ==========================================
 # PASSWORD GATE (fails closed)
 # ==========================================
+setup()                     # site styling + top menu, so the quote page matches the website
 st.markdown(CSS, unsafe_allow_html=True)
+header("quote")
 
 
 def check_password():
@@ -1059,7 +1063,7 @@ def hero_html(active_step):
         state = "done" if i < active_step else "active" if i == active_step else ""
         num = icon("check", 12, 3) if state == "done" else str(i)
         parts.append(f'<div class="pe-step {state}"><span class="num">{num}</span>{label}</div>')
-    return ('<div class="pe-hero"><div>' + brand_row() +
+    return ('<div class="pe-hero"><div>' +
             f'<div class="pe-eyebrow"><span class="dot"></span>Telephony quotation · {datetime.now().strftime("%d %B %Y")}</div>'
             '<div class="pe-title">Build a quotation</div>'
             '<div class="pe-sub">Add user licences, choose a deployment and pick the hardware. '

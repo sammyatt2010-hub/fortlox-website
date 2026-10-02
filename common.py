@@ -562,7 +562,8 @@ def brand_html():
             f'<div class="fx-word"><b>FORTLOX</b> <span>SECURITY</span></div></div>')
 
 
-PAGES = [("home", "home.py", "Home"), ("phones", "phones.py", "Phones"), ("cctv", "cctv.py", "CCTV")]
+PAGES = [("home", "home.py", "Home"), ("phones", "phones.py", "Phones"), ("cctv", "cctv.py", "CCTV"),
+         ("quote", "quote.py", "Quote")]
 
 
 def header(active="home"):
@@ -575,7 +576,8 @@ def header(active="home"):
                 render_html(f'<span class="fx-navon">{label}</span>', width="content")
             else:
                 st.page_link(page, label=label)
-        render_html(f'<div class="fx-nav"><a class="hide-m" href="#contact">Contact</a>'
+        contact = '<a class="hide-m" href="#contact">Contact</a>' if active != "quote" else ""
+        render_html(f'<div class="fx-nav">{contact}'
                     f'<a class="fx-call" href="tel:{PHONE_LINK}">{icon("phone", 16)}'
                     f'<span class="t">{PHONE_DISPLAY}</span></a></div>', width="content")
 
