@@ -77,9 +77,23 @@ def render_html(markup, target=None):
     (target or st).markdown(" ".join(l.strip() for l in markup.splitlines()), unsafe_allow_html=True)
 
 
+def find_asset(*names):
+    """Find an image whether it sits in /assets or the repo root, any letter case."""
+    for folder in (ASSETS, BASE):
+        if not folder.is_dir():
+            continue
+        files = {f.name.lower(): f for f in folder.iterdir() if f.is_file()}
+        for n in names:
+            if n.lower() in files:
+                return files[n.lower()]
+    return None
+
+
 @st.cache_data
-def b64(path: Path) -> str:
-    return base64.b64encode(path.read_bytes()).decode()
+def b64(path) -> str:
+    if path is None:
+        return ""
+    return base64.b64encode(Path(path).read_bytes()).decode()
 
 
 ICONS = {
@@ -119,12 +133,13 @@ def feature_grid(features):
 # ───────────────────────────── PAGE SETUP ─────────────────────────────
 st.set_page_config(
     page_title=f"{COMPANY} | Business telephony & CCTV",
-    page_icon=str(ASSETS / "favicon.png"),
+    page_icon=str(find_asset("favicon.png", "emblem.png", "logo.png") or "🛡️"),
     layout="wide",
     initial_sidebar_state="collapsed",
 )
 
-EMBLEM = b64(ASSETS / "emblem.png")
+# Falls back to the original logo if emblem.png is missing, so the page never crashes
+EMBLEM = b64(find_asset("emblem.png", "logo.png"))
 
 CSS = """
 <style>
