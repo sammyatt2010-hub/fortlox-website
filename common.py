@@ -68,9 +68,9 @@ def esc(v):
     return html_lib.escape(str(v if v is not None else ""), quote=True)
 
 
-def render_html(markup, target=None):
+def render_html(markup, target=None, **kw):
     # Flatten lines: indented HTML inside st.markdown would otherwise become a code block
-    (target or st).markdown(" ".join(l.strip() for l in markup.splitlines()), unsafe_allow_html=True)
+    (target or st).markdown(" ".join(l.strip() for l in markup.splitlines()), unsafe_allow_html=True, **kw)
 
 
 @st.cache_data
@@ -391,9 +391,9 @@ a.fx-detail:hover .v{color:var(--cyan-2)}
 .fx-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px}
 .fx-card{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--border);border-radius:18px;overflow:hidden;transition:border-color .2s ease}
 .fx-card:hover{border-color:rgba(41,169,225,.5)}
-.fx-card .stage{aspect-ratio:4/3;display:grid;place-items:center;padding:18px;
+.fx-card .stage{position:relative;aspect-ratio:4/3;display:grid;place-items:center;overflow:hidden;
   background:radial-gradient(120% 95% at 50% 25%,#FFFFFF 0%,#F3F5FA 62%,#E2E8F1 100%)}
-.fx-card .stage img{max-width:82%;max-height:100%;object-fit:contain;filter:drop-shadow(0 10px 14px rgba(15,30,50,.16))}
+.fx-card .stage img{position:absolute;inset:0;margin:auto;max-width:84%;max-height:84%;width:auto;height:auto;object-fit:contain;filter:drop-shadow(0 10px 14px rgba(15,30,50,.16))}
 .fx-card .stage .missing{color:#8C98B0;font-size:.85rem;text-align:center}
 .fx-card .body{padding:18px 20px 20px;display:flex;flex-direction:column;flex:1}
 .fx-card .brand{font-size:.8rem;font-weight:600;color:var(--cyan-2);margin-bottom:2px}
@@ -434,12 +434,48 @@ a.fx-detail:hover .v{color:var(--cyan-2)}
   .fx-band{padding:26px 22px}
   .fx-grid{grid-template-columns:1fr 1fr;gap:12px}
   .fx-card{border-radius:14px}
-  .fx-card .stage{padding:12px}
   .fx-card .body{padding:12px 12px 14px}
   .fx-card h4{font-size:1.02rem}
   .fx-card p{font-size:.8rem;margin-bottom:10px}
   .fx-tags span{font-size:.66rem;padding:3px 7px}
   .fx-card .ask{font-size:.8rem}
+}
+
+/* ---------- Header built from Streamlit elements ---------- */
+.st-key-fx-header{padding:16px 0;border-bottom:1px solid var(--border);flex-wrap:nowrap!important;gap:4px!important;align-items:center}
+.st-key-fx-header>div:first-child{margin-right:auto}
+.st-key-fx-header [data-testid="stMarkdownContainer"] p{margin:0}
+.fx-navon{display:inline-block;color:var(--text);background:var(--surface);font-size:.9rem;font-weight:500;padding:8px 12px;border-radius:9px;white-space:nowrap}
+.st-key-fx-header [data-testid="stPageLink"] a{padding:8px 12px!important;border-radius:9px!important;background:transparent!important;margin:0!important}
+.st-key-fx-header [data-testid="stPageLink"] a:hover{background:var(--surface)!important}
+.st-key-fx-header [data-testid="stPageLink"] a *{color:var(--muted)!important;font-size:.9rem!important;font-weight:500!important}
+.st-key-fx-header [data-testid="stPageLink"] a:hover *{color:var(--text)!important}
+.st-key-fx-header .fx-nav{gap:4px}
+.st-key-fx-header [data-testid="stElementContainer"]{display:flex;align-items:center}
+.st-key-fx-header [data-testid="stPageLink"] p,.st-key-fx-header [data-testid="stPageLink"] span{margin:0!important;line-height:1.25!important}
+.st-key-fx-header [data-testid="stMarkdownContainer"],.st-key-fx-header [data-testid="stMarkdownContainer"]>div,.st-key-fx-header [data-testid="stMarkdownContainer"] p{display:flex!important;align-items:center}
+.st-key-fx-header [data-testid="stElementContainer"]{margin:0!important}
+.st-key-fx-header [data-testid="stElementContainer"],.st-key-fx-header [data-testid="stMarkdown"],.st-key-fx-header [data-testid="stMarkdownContainer"]{height:auto!important;min-height:38px;overflow:visible}
+.st-key-fx-header>div:first-child{margin-right:auto!important}
+.fx-navon,.st-key-fx-header .fx-nav a,.st-key-fx-header [data-testid="stPageLink"] a{display:inline-flex!important;align-items:center;height:38px;padding-top:0!important;padding-bottom:0!important;line-height:1!important;box-sizing:border-box}
+.st-key-door-phones [data-testid="stPageLink"],.st-key-door-cctv [data-testid="stPageLink"]{margin-top:8px}
+
+/* ---------- Home doorways as Streamlit containers ---------- */
+.st-key-door-phones,.st-key-door-cctv{background:linear-gradient(180deg,var(--surface-2),var(--surface));border:1px solid var(--border);border-radius:22px;overflow:hidden;gap:0!important;padding-bottom:30px;height:100%}
+.st-key-door-phones .fx-door,.st-key-door-cctv .fx-door{background:none;border:0;border-radius:0}
+.st-key-door-phones .fx-door .txt,.st-key-door-cctv .fx-door .txt{padding-bottom:0}
+.st-key-door-phones [data-testid="stPageLink"],.st-key-door-cctv [data-testid="stPageLink"]{padding:0 30px}
+.st-key-door-phones [data-testid="stPageLink"] a,.st-key-door-cctv [data-testid="stPageLink"] a{display:inline-flex!important;width:auto!important;padding:12px 20px!important;border-radius:12px!important;
+  border:1px solid var(--border-strong)!important;background:rgba(14,23,38,.6)!important;transition:border-color .15s ease}
+.st-key-door-phones [data-testid="stPageLink"] a:hover,.st-key-door-cctv [data-testid="stPageLink"] a:hover{border-color:var(--cyan)!important}
+.st-key-door-phones [data-testid="stPageLink"] a *,.st-key-door-cctv [data-testid="stPageLink"] a *{color:var(--text)!important;font-weight:600!important;font-size:.97rem!important}
+[data-testid="stHorizontalBlock"]:has(.st-key-door-phones) [data-testid="stColumn"]>div{height:100%}
+@media (max-width:600px){
+  .st-key-door-phones [data-testid="stPageLink"],.st-key-door-cctv [data-testid="stPageLink"]{padding:0 20px}
+  .st-key-door-phones,.st-key-door-cctv{padding-bottom:24px}
+  .st-key-fx-header [data-testid="stPageLink"] a{padding:8px 8px!important}
+  .fx-navon{padding:8px 8px;font-size:.86rem}
+  .st-key-fx-header .fx-nav a.hide-m{display:none!important}
 }
 </style>
 """
@@ -452,27 +488,32 @@ def setup():
 
 def brand_html():
     emblem = b64_file(find_asset("emblem.png", "logo.png"))
-    return (f'<a class="fx-brand" href="/" target="_top" aria-label="{esc(COMPANY)} home">'
+    return (f'<div class="fx-brand" aria-label="{esc(COMPANY)}">'
             f'<img src="data:image/png;base64,{emblem}" alt="">'
-            f'<div class="fx-word"><b>FORTLOX</b> <span>SECURITY</span></div></a>')
+            f'<div class="fx-word"><b>FORTLOX</b> <span>SECURITY</span></div></div>')
+
+
+PAGES = [("home", "home.py", "Home"), ("phones", "phones.py", "Phones"), ("cctv", "cctv.py", "CCTV")]
 
 
 def header(active="home"):
-    def link(key, href, label, extra=""):
-        cls = (" on" if key == active else "") + extra
-        return f'<a class="{cls.strip()}" href="{href}" target="_top">{label}</a>'
-    render_html(f"""
-    <div id="top" class="fx-top">
-      {brand_html()}
-      <nav class="fx-nav" aria-label="Main">
-        {link("home", "/", "Home", " hide-m")}
-        {link("phones", "/phones", "Phones")}
-        {link("cctv", "/cctv", "CCTV")}
-        <a class="hide-m" href="#contact">Contact</a>
-        <a class="fx-call" href="tel:{PHONE_LINK}" target="_top">{icon('phone', 16)}<span class="t">{PHONE_DISPLAY}</span></a>
-      </nav>
-    </div>
-    """)
+    """Top bar. Page links use st.page_link, which switches pages inside the app
+    (plain HTML links can't navigate on Streamlit Community Cloud)."""
+    with st.container(key="fx-header", horizontal=True, vertical_alignment="center", gap=None):
+        render_html(brand_html(), width="content")
+        for key, page, label in PAGES:
+            if key == active:
+                render_html(f'<span class="fx-navon">{label}</span>', width="content")
+            else:
+                st.page_link(page, label=label)
+        render_html(f'<div class="fx-nav"><a class="hide-m" href="#contact">Contact</a>'
+                    f'<a class="fx-call" href="tel:{PHONE_LINK}">{icon("phone", 16)}'
+                    f'<span class="t">{PHONE_DISPLAY}</span></a></div>', width="content")
+
+
+def door_link(page, label):
+    """A button-style link to another page (used on the home page panels)."""
+    st.page_link(page, label=label)
 
 
 def product_grid(products, categories):
@@ -493,7 +534,7 @@ def product_grid(products, categories):
                 f'<article class="fx-card"><div class="stage">{stage}</div><div class="body">'
                 f'{brand}<h4>{esc(p["name"])}</h4><p>{esc(p.get("desc", ""))}</p>'
                 f'<div class="fx-tags">{tags}</div>'
-                f'<a class="ask" href="{esc(mailto("Enquiry: " + full_name))}" target="_top">{icon("mail", 16)}Ask about this</a>'
+                f'<a class="ask" href="{esc(mailto("Enquiry: " + full_name))}">{icon("mail", 16)}Ask about this</a>'
                 f'</div></article>'
             )
         render_html(f'<div class="fx-cat"><h3>{esc(cat)}</h3><p>{esc(blurb)}</p></div>'
@@ -505,8 +546,8 @@ def contact_band(title, text, subject):
     <section id="contact" class="fx-band">
       <div><h2>{esc(title)}</h2><p>{esc(text)}</p></div>
       <div class="fx-ctas">
-        <a class="fx-btn primary" href="tel:{PHONE_LINK}" target="_top">{icon('phone', 18)}Call {PHONE_DISPLAY}</a>
-        <a class="fx-btn ghost" href="{esc(mailto(subject))}" target="_top">{icon('mail', 18)}Email us</a>
+        <a class="fx-btn primary" href="tel:{PHONE_LINK}">{icon('phone', 18)}Call {PHONE_DISPLAY}</a>
+        <a class="fx-btn ghost" href="{esc(mailto(subject))}">{icon('mail', 18)}Email us</a>
       </div>
     </section>
     """)
