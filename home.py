@@ -6,7 +6,7 @@ import streamlit as st
 import streamlit.components.v1 as components
 
 from common import (ADDRESS_LINES, CALL_POP, CAM_TILE, COMPANY, EMAIL, MAP_QUERY, PHONE_DISPLAY,
-                    PHONE_LINK, STEPS, WEBSITE, b64_file, esc, find_asset, footer, header,
+                    PHONE_LINK, STEPS, WEBSITE, b64_file, door_link, esc, find_asset, footer, header,
                     icon, render_html, setup)
 
 setup()
@@ -23,7 +23,7 @@ render_html(f"""
     <p class="lede">{COMPANY} supplies cloud telephone systems and professional camera systems to businesses,
     with one local team handling the survey, the installation and the support afterwards.</p>
     <div class="fx-ctas">
-      <a class="fx-btn primary" href="tel:{PHONE_LINK}" target="_top">{icon('phone', 18)}Call {PHONE_DISPLAY}</a>
+      <a class="fx-btn primary" href="tel:{PHONE_LINK}">{icon('phone', 18)}Call {PHONE_DISPLAY}</a>
       <a class="fx-btn ghost" href="#contact">{icon('mail', 18)}Send an enquiry</a>
     </div>
   </div>
@@ -34,30 +34,35 @@ render_html(f"""
 """)
 
 # ───────────────────────────── DOORWAYS ─────────────────────────────
-render_html(f"""
-<section class="fx-doors" aria-label="What we supply">
-  <article class="fx-door">
-    <div class="vis">{CALL_POP}</div>
-    <div class="txt">
-      <div class="fx-tag">{icon('phone', 16)}Telephony</div>
-      <h2>Cloud phone systems</h2>
-      <p>Keep your numbers and answer from desk phones, mobiles or laptops, with call recording,
-      CRM links and contact-centre tools built in. Handsets from Yealink and Fanvil.</p>
-      <a class="fx-btn ghost" href="/phones" target="_top">See phones and features</a>
-    </div>
-  </article>
-  <article class="fx-door">
-    <div class="vis">{CAM_TILE}</div>
-    <div class="txt">
-      <div class="fx-tag">{icon('camera', 16)}CCTV and security</div>
-      <h2>Camera systems</h2>
-      <p>Colour night vision, smart intruder detection, and footage you can search and watch from your phone,
-      designed around your site.</p>
-      <a class="fx-btn ghost" href="/cctv" target="_top">See CCTV and features</a>
-    </div>
-  </article>
-</section>
-""")
+d1, d2 = st.columns(2, gap="medium")
+with d1:
+    with st.container(key="door-phones"):
+        render_html(f"""
+        <article class="fx-door">
+          <div class="vis">{CALL_POP}</div>
+          <div class="txt">
+            <div class="fx-tag">{icon('phone', 16)}Telephony</div>
+            <h2>Cloud phone systems</h2>
+            <p>Keep your numbers and answer from desk phones, mobiles or laptops, with call recording,
+            CRM links and contact-centre tools built in. Handsets from Yealink and Fanvil.</p>
+          </div>
+        </article>
+        """)
+        door_link("phones.py", "See phones and features")
+with d2:
+    with st.container(key="door-cctv"):
+        render_html(f"""
+        <article class="fx-door">
+          <div class="vis">{CAM_TILE}</div>
+          <div class="txt">
+            <div class="fx-tag">{icon('camera', 16)}CCTV and security</div>
+            <h2>Camera systems</h2>
+            <p>Colour night vision, smart intruder detection, and footage you can search and watch from your phone,
+            designed around your site.</p>
+          </div>
+        </article>
+        """)
+        door_link("cctv.py", "See CCTV and features")
 
 # ───────────────────────────── HOW WE WORK ─────────────────────────────
 steps_html = "".join(
@@ -86,8 +91,8 @@ with left:
     address_html = "<br>".join(esc(l) for l in ADDRESS_LINES)
     render_html(f"""
     <div class="fx-details">
-      <a class="fx-detail" href="tel:{PHONE_LINK}" target="_top">{icon('phone')}<div><div class="l">Phone</div><div class="v">{PHONE_DISPLAY}</div></div></a>
-      <a class="fx-detail" href="mailto:{EMAIL}" target="_top">{icon('mail')}<div><div class="l">Email</div><div class="v">{EMAIL}</div></div></a>
+      <a class="fx-detail" href="tel:{PHONE_LINK}">{icon('phone')}<div><div class="l">Phone</div><div class="v">{PHONE_DISPLAY}</div></div></a>
+      <a class="fx-detail" href="mailto:{EMAIL}">{icon('mail')}<div><div class="l">Email</div><div class="v">{EMAIL}</div></div></a>
       <div class="fx-detail">{icon('pin')}<div><div class="l">Address</div><div class="v">{address_html}</div></div></div>
       <a class="fx-detail" href="https://{WEBSITE}" target="_blank" rel="noopener">{icon('globe')}<div><div class="l">Website</div><div class="v">{WEBSITE}</div></div></a>
     </div>
