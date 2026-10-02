@@ -37,7 +37,7 @@ if has_range:
     render_html("""
     <div id="range" class="fx-section" style="padding-bottom:0">
       <h2>The range</h2>
-      <p class="intro" style="margin-bottom:0">Cameras, recorders and accessories, supplied, installed and supported by us.</p>
+      <p class="intro" style="margin-bottom:0">Every camera is supplied, installed and supported by our own team.</p>
     </div>
     """)
     product_grid(CAMERAS, CAMERA_CATEGORIES)
