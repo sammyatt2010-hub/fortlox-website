@@ -99,10 +99,50 @@ PHONES = [
 ]
 
 # ───────────────────────────── CCTV ─────────────────────────────
+# No brand shown on cameras (leave "brand" empty). Image files have had the
+# manufacturer's logo removed, so use these files rather than the originals.
 CAMERA_CATEGORIES = [
-    # ("Turret cameras", "Short description of the group."),
+    ("Everyday cameras", "Domes, turrets and bullets for entrances, car parks, shop floors and yards."),
+    ("Specialist cameras", "Wide-area, long-range and thermal cameras for larger or higher-risk sites."),
 ]
 
 CAMERAS = [
-    # Camera products go here, same layout as the phones above.
+    # --- Everyday cameras ---
+    {
+        "brand": "", "name": "4MP Vandal-Resistant Dome", "image": "CCTV_Dome_Vandal.png", "category": "Everyday cameras",
+        "desc": "A tough, low-profile dome with a wide 2.8mm lens, ideal for receptions, corridors and anywhere it could be knocked or tampered with.",
+        "tags": ["4MP", "Wide-angle view", "40m night vision"],
+    },
+    {
+        "brand": "", "name": "5MP Turret with Audio", "image": "CCTV_Turret_Audio.png", "category": "Everyday cameras",
+        "desc": "A compact turret with a wide view and a built-in microphone, so you hear what happened as well as see it.",
+        "tags": ["5MP", "Built-in microphone", "Wide-angle view"],
+    },
+    {
+        "brand": "", "name": "5MP Motorised Zoom Turret", "image": "CCTV_Turret_Motorised.png", "category": "Everyday cameras",
+        "desc": "A remote-adjustable zoom lens lets us frame the view perfectly from a phone or laptop, with no ladder needed later.",
+        "tags": ["5MP", "Motorised zoom", "40m night vision"],
+    },
+    {
+        "brand": "", "name": "5MP Motorised Zoom Bullet", "image": "CCTV_Bullet_Motorised.png", "category": "Everyday cameras",
+        "desc": "A highly visible bullet camera for gates, driveways and perimeters, zoomed in remotely to capture faces and number plates.",
+        "tags": ["5MP", "Motorised zoom", "Long-range night vision"],
+    },
+
+    # --- Specialist cameras ---
+    {
+        "brand": "", "name": "360° Fisheye Camera", "image": "CCTV_Fisheye_360.png", "category": "Specialist cameras",
+        "desc": "One 12MP camera covers a whole room with no blind spots, ideal for shops, open-plan offices and warehouses.",
+        "tags": ["12MP", "360° view", "Two-way audio"],
+    },
+    {
+        "brand": "", "name": "22x Zoom PTZ Camera", "image": "CCTV_PTZ_22x.png", "category": "Specialist cameras",
+        "desc": "Pan, tilt and zoom across large sites like yards and car parks, picking out detail far into the distance, day or night.",
+        "tags": ["22x optical zoom", "Pan and tilt", "Long-range night vision"],
+    },
+    {
+        "brand": "", "name": "Thermal and Colour Turret", "image": "CCTV_Thermal_Turret.png", "category": "Specialist cameras",
+        "desc": "Two cameras in one: a thermal sensor that spots people in total darkness and detects fire or overheating, plus a 4MP colour camera, with red and blue warning lights.",
+        "tags": ["Thermal + 4MP colour", "Fire detection", "Warning lights"],
+    },
 ]
