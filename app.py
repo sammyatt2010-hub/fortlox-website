@@ -19,5 +19,6 @@ pages = [
     st.Page("home.py", title="Fortlox Security | Business telephony & CCTV", default=True),
     st.Page("phones.py", title="Phones | Fortlox Security", url_path="phones"),
     st.Page("cctv.py", title="CCTV | Fortlox Security", url_path="cctv"),
+    st.Page("quote.py", title="Quotation | Fortlox Security", url_path="quote"),  # staff only, password locked
 ]
 st.navigation(pages, position="hidden").run()
